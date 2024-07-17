@@ -1632,8 +1632,10 @@ Synchronization holds synchronization lock configuration
 ### Fields
 | Field Name | Field Type | Description   |
 |:----------:|:----------:|---------------|
-|`mutex`|[`Mutex`](#mutex)|Mutex holds the Mutex lock details|
-|`semaphore`|[`SemaphoreRef`](#semaphoreref)|Semaphore holds the Semaphore configuration|
+|`mutex`|[`Mutex`](#mutex)|Mutex holds the Mutex lock details - deprecated, use mutexes instead|
+|`mutexes`|`Array<`[`Mutex`](#mutex)`>`|Mutexes holds the list of Mutex lock details|
+|`semaphore`|[`SemaphoreRef`](#semaphoreref)|Semaphore holds the Semaphore configuration - deprecated, use semaphores instead|
+|`semaphores`|`Array<`[`SemaphoreRef`](#semaphoreref)`>`|Semaphores holds the list of Semaphores configuration|
 
 ## Template
 
@@ -2348,14 +2350,6 @@ Backoff is a backoff strategy to use within retryStrategy
 ## Mutex
 
 Mutex holds Mutex configuration
-
-<details markdown>
-<summary>Examples with this field (click to open)</summary>
-
-- [`synchronization-mutex-tmpl-level.yaml`](https://github.com/argoproj/argo-workflows/blob/main/examples/synchronization-mutex-tmpl-level.yaml)
-
-- [`synchronization-mutex-wf-level.yaml`](https://github.com/argoproj/argo-workflows/blob/main/examples/synchronization-mutex-wf-level.yaml)
-</details>
 
 ### Fields
 | Field Name | Field Type | Description   |
@@ -3230,14 +3224,6 @@ NodeSynchronizationStatus stores the status of a node
 ## MutexStatus
 
 MutexStatus contains which objects hold mutex locks, and which objects this workflow is waiting on to release locks.
-
-<details markdown>
-<summary>Examples with this field (click to open)</summary>
-
-- [`synchronization-mutex-tmpl-level.yaml`](https://github.com/argoproj/argo-workflows/blob/main/examples/synchronization-mutex-tmpl-level.yaml)
-
-- [`synchronization-mutex-wf-level.yaml`](https://github.com/argoproj/argo-workflows/blob/main/examples/synchronization-mutex-wf-level.yaml)
-</details>
 
 ### Fields
 | Field Name | Field Type | Description   |

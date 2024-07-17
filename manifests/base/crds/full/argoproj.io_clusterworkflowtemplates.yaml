@@ -1939,6 +1939,15 @@ spec:
                       namespace:
                         type: string
                     type: object
+                  mutexes:
+                    items:
+                      properties:
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+                      type: object
+                    type: array
                   semaphore:
                     properties:
                       configMapKeyRef:
@@ -1956,6 +1965,25 @@ spec:
                       namespace:
                         type: string
                     type: object
+                  semaphores:
+                    items:
+                      properties:
+                        configMapKeyRef:
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              type: string
+                            optional:
+                              type: boolean
+                          required:
+                          - key
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        namespace:
+                          type: string
+                      type: object
+                    type: array
                 type: object
               templateDefaults:
                 properties:
@@ -9694,6 +9722,15 @@ spec:
                           namespace:
                             type: string
                         type: object
+                      mutexes:
+                        items:
+                          properties:
+                            name:
+                              type: string
+                            namespace:
+                              type: string
+                          type: object
+                        type: array
                       semaphore:
                         properties:
                           configMapKeyRef:
@@ -9711,6 +9748,25 @@ spec:
                           namespace:
                             type: string
                         type: object
+                      semaphores:
+                        items:
+                          properties:
+                            configMapKeyRef:
+                              properties:
+                                key:
+                                  type: string
+                                name:
+                                  type: string
+                                optional:
+                                  type: boolean
+                              required:
+                              - key
+                              type: object
+                              x-kubernetes-map-type: atomic
+                            namespace:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   timeout:
                     type: string
@@ -18180,6 +18236,15 @@ spec:
                             namespace:
                               type: string
                           type: object
+                        mutexes:
+                          items:
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                          type: array
                         semaphore:
                           properties:
                             configMapKeyRef:
@@ -18197,6 +18262,25 @@ spec:
                             namespace:
                               type: string
                           type: object
+                        semaphores:
+                          items:
+                            properties:
+                              configMapKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                  optional:
+                                    type: boolean
+                                required:
+                                - key
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              namespace:
+                                type: string
+                            type: object
+                          type: array
                       type: object
                     timeout:
                       type: string

@@ -1,6 +1,7 @@
 # Synchronization
 
 > v2.10 and after
+> v3.6 for multiple
 
 You can use synchronization to limit the parallel execution of workflows or templates.
 You can use mutexes to restrict workflows or templates to only having a single concurrent section.
@@ -41,10 +42,10 @@ metadata:
 spec:
   entrypoint: whalesay
   synchronization:
-    semaphore:
-      configMapKeyRef:
-        name: my-config
-        key: workflow
+    semaphores:
+      - configMapKeyRef:
+          name: my-config
+          key: workflow
   templates:
   - name: whalesay
     container:
@@ -63,8 +64,8 @@ metadata:
 spec:
   entrypoint: whalesay
   synchronization:
-    mutex:
-      name: workflow
+    mutexes:
+      - name: workflow
   templates:
   - name: whalesay
     container:
@@ -103,10 +104,10 @@ spec:
 
   - name: acquire-lock
     synchronization:
-      semaphore:
-        configMapKeyRef:
-          name: my-config
-          key: template
+      semaphores:
+        - configMapKeyRef:
+            name: my-config
+            key: template
     container:
       image: alpine:latest
       command: [sh, -c]
@@ -135,8 +136,8 @@ spec:
 
   - name: acquire-lock
     synchronization:
-      mutex:
-        name: template
+      mutexes:
+        - name: template
     container:
       image: alpine:latest
       command: [sh, -c]
@@ -150,6 +151,26 @@ Examples:
 1. [Step level semaphore](https://github.com/argoproj/argo-workflows/blob/main/examples/synchronization-tmpl-level.yaml)
 1. [Step level mutex](https://github.com/argoproj/argo-workflows/blob/main/examples/synchronization-mutex-tmpl-level.yaml)
 
+## Multiple locks
+
+You can specify multiple locks in a single workflow or template.
+
+```yaml
+synchronization:
+  mutexes:
+    - name: alpha
+    - name: beta
+  semaphores:
+    - configMapKeyRef:
+        key: foo
+        name: my-config
+    - configMapKeyRef:
+        key: bar
+        name: my-config
+```
+
+The workflow will block until all of these locks are available.
+
 ## Queuing
 
 When a Workflow cannot take a lock it will be placed into a ordered queue.
@@ -159,6 +180,33 @@ The queue is first ordered by priority, with a higher priority number being plac
 The queue is then ordered by `CreationTimestamp` of the Workflow; older Workflows will be ordered before newer workflows.
 
 Workflows are only be allowed to take a lock if they are at the front of the queue for that lock.
+
+!!! Warning
+    If a Workflow is at the front of the queue and it needs to acquire multiple locks, all other Workflows that also need those same locks will wait. This applies even if the other Workflows only wish to acquire a subset of those locks.
+
+## Legacy
+
+In workflows prior to 3.6 you can only specify one lock in any one workflow or template using either a mutex:
+
+```yaml
+    synchronization:
+      mutex:
+     ...
+```
+
+or a semaphore:
+
+```yaml
+    synchronizaion:
+   semamphore:
+     ...
+```
+
+Specifying both would not work in <3.6, only the semaphore would be used.
+
+The single `mutex` and `semaphore` syntax still works in version 3.6 but is considered deprecated.
+Both the `mutex` and the `semaphore` will be taken in version 3.6 with this syntax.
+This syntax can be mixed with `mutexes` and `semaphores`, all locks will be required.
 
 ## Other Parallelism support
 
